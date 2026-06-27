@@ -8,7 +8,7 @@ export const Login = () => {
 
       <img
         className="absolute inset-0 h-full w-full object-cover"
-        src="https://assets.nflxext.com/ffe/siteui/vlv3/81b52f88-dc76-488d-a939-0cf13a260a6e/web/IN-en-20260622-TRIFECTA-perspective_d39d60ef-cb5a-4793-9546-0a8d9a87948e_medium.jpg"
+        src= "loginBg.png"
         alt="Login Background"
       />
       <div className="absolute inset-0 bg-black/50" />
