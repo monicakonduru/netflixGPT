@@ -20,13 +20,6 @@ const SignUp = () => {
         />
 
         <div className="flex items-center gap-3 md:gap-4">
-          <div className="flex items-center gap-1 rounded border border-white/40 bg-black/40 px-2 py-1 text-sm text-white">
-            <span aria-hidden="true">🌐</span>
-            <select className="cursor-pointer bg-transparent outline-none">
-              <option className="text-black">English</option>
-              <option className="text-black">हिन्दी</option>
-            </select>
-          </div>
           <Link
             to="/"
             className="rounded bg-[#e50914] px-4 py-1.5 text-sm font-medium text-white transition hover:bg-[#f6121d]"
