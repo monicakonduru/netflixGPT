@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import Header from './Header'
 import Loader from './Loader'
 
 function Browser() {
@@ -17,7 +18,9 @@ function Browser() {
   if (!authChecked) return <Loader />
 
   return (
-    <div>Browser</div>
+    <div className="relative min-h-screen bg-black">
+      <Header />
+    </div>
   )
 }
 
