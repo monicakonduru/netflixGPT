@@ -1,7 +1,17 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const SignUp = () => {
+  const navigate = useNavigate()
+  const email = useRef(null)
+
+  // Carry the entered email over to the Login form in sign-up mode, where the
+  // password is collected and the Firebase account is created.
+  const handleGetStarted = (e) => {
+    e.preventDefault()
+    navigate('/', { state: { email: email.current.value, signup: true } })
+  }
+
   return (
     <div className="relative min-h-screen w-full">
       <img
@@ -41,13 +51,20 @@ const SignUp = () => {
           Ready to watch? Enter your email to create or restart your membership.
         </p>
 
-        <form className="mt-5 flex w-full max-w-2xl flex-col gap-3 sm:flex-row">
+        <form
+          onSubmit={handleGetStarted}
+          className="mt-5 flex w-full max-w-2xl flex-col gap-3 sm:flex-row"
+        >
           <input
+            ref={email}
             type="email"
             placeholder="Email address"
             className="w-full rounded border border-white/40 bg-black/40 px-5 py-4 text-base text-white outline-none placeholder:text-gray-300 focus:border-white"
           />
-          <button className="flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded bg-[#e50914] px-7 py-4 text-xl font-medium text-white transition hover:bg-[#f6121d]">
+          <button
+            type="submit"
+            className="flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded bg-[#e50914] px-7 py-4 text-xl font-medium text-white transition hover:bg-[#f6121d]"
+          >
             Get Started
             <span aria-hidden="true">›</span>
           </button>
