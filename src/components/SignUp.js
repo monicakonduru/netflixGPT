@@ -1,16 +1,25 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../utils/firebase'
 import { validateForm } from '../utils/validate'
 import { authErrorMessage } from '../utils/authErrors'
+import Loader from './Loader'
 
 const SignUp = () => {
   const navigate = useNavigate()
+  const user = useSelector((store) => store.user)
+  const authChecked = useSelector((store) => store.app.authChecked)
   const email = useRef(null)
   const password = useRef(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Already signed in? Don't show the signup form — go to browse.
+  useEffect(() => {
+    if (authChecked && user) navigate('/browse')
+  }, [authChecked, user, navigate])
 
   // Create the Firebase account, then drop the new user straight into /browse.
   const handleGetStarted = async (e) => {
@@ -34,6 +43,9 @@ const SignUp = () => {
       setIsSubmitting(false)
     }
   }
+
+  // Don't flash the signup form before we know if a session exists.
+  if (!authChecked) return <Loader />
 
   return (
     <div className="relative min-h-screen w-full">
