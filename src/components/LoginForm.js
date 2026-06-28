@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { auth } from '../utils/firebase'
 import { validateForm } from '../utils/validate'
@@ -17,6 +18,7 @@ const LoginForm = () => {
   const email = useRef(null)
   const password = useRef(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [infoMessage, setInfoMessage] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSignIn = async (e) => {
@@ -35,6 +37,29 @@ const LoginForm = () => {
       navigate('/browse')
     } catch (error) {
       console.error('Sign in failed:', error.code, error.message)
+      setErrorMessage(authErrorMessage(error.code))
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // Email a password-reset link to whatever address is in the email field.
+  const handleForgotPassword = async () => {
+    const emailValue = email.current.value
+    setInfoMessage(null)
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+      setErrorMessage('Enter your email above first, then click "Forgot password?".')
+      return
+    }
+
+    setErrorMessage(null)
+    setIsSubmitting(true)
+    try {
+      await sendPasswordResetEmail(auth, emailValue)
+      setInfoMessage(`Password reset link sent to ${emailValue}. Check your inbox.`)
+    } catch (error) {
+      console.error('Password reset failed:', error.code, error.message)
       setErrorMessage(authErrorMessage(error.code))
     } finally {
       setIsSubmitting(false)
@@ -86,6 +111,9 @@ const LoginForm = () => {
       {errorMessage && (
         <p className="mb-4 text-sm font-medium text-[#e50914]">{errorMessage}</p>
       )}
+      {infoMessage && (
+        <p className="mb-4 text-sm font-medium text-[#4bb543]">{infoMessage}</p>
+      )}
 
       <button
         type="submit"
@@ -133,7 +161,14 @@ const LoginForm = () => {
           <input type="checkbox" defaultChecked className="accent-[#b3b3b3]" />
           Remember me
         </label>
-        <span className="cursor-pointer hover:underline">Need help?</span>
+        <button
+          type="button"
+          onClick={handleForgotPassword}
+          disabled={isSubmitting}
+          className="cursor-pointer hover:underline disabled:opacity-60"
+        >
+          Forgot password?
+        </button>
       </div>
 
       <p className="mb-4 text-[#737373]">
