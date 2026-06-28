@@ -1,23 +1,49 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { validateForm } from '../utils/validate'
 
 const LoginForm = () => {
+  const email = useRef(null)
+  const password = useRef(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  const handleSignIn = (e) => {
+    e.preventDefault()
+    const message = validateForm(
+      email.current.value,
+      password.current.value
+    )
+    setErrorMessage(message)
+  }
+
   return (
-    <form className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-md bg-black/75 px-16 py-12 text-white">
+    <form
+      onSubmit={handleSignIn}
+      className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-md bg-black/75 px-16 py-12 text-white"
+    >
       <h1 className="mb-7 text-3xl font-bold">Sign In</h1>
 
       <input
+        ref={email}
         type="text"
         placeholder="Email or phone number"
         className="mb-4 w-full rounded bg-[#333] px-5 py-4 text-sm outline-none focus:bg-[#454545]"
       />
       <input
+        ref={password}
         type="password"
         placeholder="Password"
         className="mb-6 w-full rounded bg-[#333] px-5 py-4 text-sm outline-none focus:bg-[#454545]"
       />
 
-      <button className="mb-3 w-full rounded bg-[#e50914] py-3 font-semibold transition hover:bg-[#f6121d]">
+      {errorMessage && (
+        <p className="mb-4 text-sm font-medium text-[#e50914]">{errorMessage}</p>
+      )}
+
+      <button
+        type="submit"
+        className="mb-3 w-full rounded bg-[#e50914] py-3 font-semibold transition hover:bg-[#f6121d]"
+      >
         Sign In
       </button>
 
