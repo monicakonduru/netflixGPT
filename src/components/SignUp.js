@@ -1,15 +1,38 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../utils/firebase'
+import { validateForm } from '../utils/validate'
+import { authErrorMessage } from '../utils/authErrors'
 
 const SignUp = () => {
   const navigate = useNavigate()
   const email = useRef(null)
+  const password = useRef(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Carry the entered email over to the Login form in sign-up mode, where the
-  // password is collected and the Firebase account is created.
-  const handleGetStarted = (e) => {
+  // Create the Firebase account, then drop the new user straight into /browse.
+  const handleGetStarted = async (e) => {
     e.preventDefault()
-    navigate('/', { state: { email: email.current.value, signup: true } })
+
+    const emailValue = email.current.value
+    const passwordValue = password.current.value
+
+    const message = validateForm(emailValue, passwordValue)
+    setErrorMessage(message)
+    if (message) return
+
+    setIsSubmitting(true)
+    try {
+      await createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+      navigate('/browse')
+    } catch (error) {
+      console.error('Sign up failed:', error.code, error.message)
+      setErrorMessage(authErrorMessage(error.code))
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -48,26 +71,42 @@ const SignUp = () => {
           Starts at ₹149. Cancel at any time.
         </p>
         <p className="mt-6 text-base md:text-lg">
-          Ready to watch? Enter your email to create or restart your membership.
+          Ready to watch? Enter your email and a password to create your
+          membership.
         </p>
 
         <form
           onSubmit={handleGetStarted}
-          className="mt-5 flex w-full max-w-2xl flex-col gap-3 sm:flex-row"
+          className="mt-5 flex w-full max-w-2xl flex-col gap-3"
         >
-          <input
-            ref={email}
-            type="email"
-            placeholder="Email address"
-            className="w-full rounded border border-white/40 bg-black/40 px-5 py-4 text-base text-white outline-none placeholder:text-gray-300 focus:border-white"
-          />
-          <button
-            type="submit"
-            className="flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded bg-[#e50914] px-7 py-4 text-xl font-medium text-white transition hover:bg-[#f6121d]"
-          >
-            Get Started
-            <span aria-hidden="true">›</span>
-          </button>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <input
+              ref={email}
+              type="email"
+              placeholder="Email address"
+              className="w-full rounded border border-white/40 bg-black/40 px-5 py-4 text-base text-white outline-none placeholder:text-gray-300 focus:border-white"
+            />
+            <input
+              ref={password}
+              type="password"
+              placeholder="Password"
+              className="w-full rounded border border-white/40 bg-black/40 px-5 py-4 text-base text-white outline-none placeholder:text-gray-300 focus:border-white"
+            />
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded bg-[#e50914] px-7 py-4 text-xl font-medium text-white transition hover:bg-[#f6121d] disabled:opacity-60"
+            >
+              {isSubmitting ? 'Please wait…' : 'Get Started'}
+              {!isSubmitting && <span aria-hidden="true">›</span>}
+            </button>
+          </div>
+
+          {errorMessage && (
+            <p className="text-left text-sm font-medium text-[#e87c03]">
+              {errorMessage}
+            </p>
+          )}
         </form>
       </main>
     </div>

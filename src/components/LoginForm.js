@@ -1,50 +1,25 @@
 import React, { useRef, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth'
 import { auth } from '../utils/firebase'
 import { validateForm } from '../utils/validate'
-
-// Turn Firebase auth error codes into messages we can show the user.
-const authErrorMessage = (code) => {
-  switch (code) {
-    case 'auth/invalid-credential':
-    case 'auth/wrong-password':
-    case 'auth/user-not-found':
-      return 'Incorrect email or password.'
-    case 'auth/email-already-in-use':
-      return 'An account already exists with this email. Try signing in.'
-    case 'auth/too-many-requests':
-      return 'Too many attempts. Please try again later.'
-    case 'auth/account-exists-with-different-credential':
-      return 'This email is already linked to a different sign-in method.'
-    default:
-      return 'Something went wrong. Please try again.'
-  }
-}
+import { authErrorMessage } from '../utils/authErrors'
 
 const googleProvider = new GoogleAuthProvider()
 
 const LoginForm = () => {
   const navigate = useNavigate()
-  const location = useLocation()
-
-  // When the user arrives from the SignUp landing page's "Get Started" button,
-  // we receive their email and a signup flag via router state. A direct visit to
-  // this route means they're signing in.
-  const isSignUp = Boolean(location.state?.signup)
-  const prefilledEmail = location.state?.email ?? ''
 
   const email = useRef(null)
   const password = useRef(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault()
 
     const emailValue = email.current.value
@@ -56,13 +31,10 @@ const LoginForm = () => {
 
     setIsSubmitting(true)
     try {
-      if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, emailValue, passwordValue)
-      } else {
-        await signInWithEmailAndPassword(auth, emailValue, passwordValue)
-      }
+      await signInWithEmailAndPassword(auth, emailValue, passwordValue)
       navigate('/browse')
     } catch (error) {
+      console.error('Sign in failed:', error.code, error.message)
       setErrorMessage(authErrorMessage(error.code))
     } finally {
       setIsSubmitting(false)
@@ -78,6 +50,7 @@ const LoginForm = () => {
       await signInWithPopup(auth, googleProvider)
       navigate('/browse')
     } catch (error) {
+      console.error('Google sign in failed:', error.code, error.message)
       // The user simply dismissing the popup isn't an error worth showing.
       if (
         error.code !== 'auth/popup-closed-by-user' &&
@@ -92,17 +65,14 @@ const LoginForm = () => {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSignIn}
       className="absolute left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-md bg-black/75 px-16 py-12 text-white"
     >
-      <h1 className="mb-7 text-3xl font-bold">
-        {isSignUp ? 'Sign Up' : 'Sign In'}
-      </h1>
+      <h1 className="mb-7 text-3xl font-bold">Sign In</h1>
 
       <input
         ref={email}
         type="text"
-        defaultValue={prefilledEmail}
         placeholder="Email or phone number"
         className="mb-4 w-full rounded bg-[#333] px-5 py-4 text-sm outline-none focus:bg-[#454545]"
       />
@@ -122,11 +92,7 @@ const LoginForm = () => {
         disabled={isSubmitting}
         className="mb-3 w-full rounded bg-[#e50914] py-3 font-semibold transition hover:bg-[#f6121d] disabled:opacity-60"
       >
-        {isSubmitting
-          ? 'Please wait…'
-          : isSignUp
-            ? 'Sign Up'
-            : 'Sign In'}
+        {isSubmitting ? 'Please wait…' : 'Sign In'}
       </button>
 
       <div className="my-3 flex items-center gap-3 text-xs text-[#b3b3b3]">
