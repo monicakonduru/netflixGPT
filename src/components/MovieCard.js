@@ -30,7 +30,12 @@ const MovieCard = ({ movie, index = 0 }) => {
         </div>
       )}
 
- 
+      {/* "Recently added" tag on non-top-10 cards. */}
+      {!isTopTen && (
+        <div className="absolute bottom-2 left-2 rounded-sm bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+          {label}
+        </div>
+      )}
     </div>
   )
 }

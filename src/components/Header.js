@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { signOut } from 'firebase/auth'
 import { auth } from '../utils/firebase'
-import { NETFLIX_LOGO, AVATAR, NAV_LINKS, PROFILES } from '../utils/constants'
+import { NETFLIX_LOGO, AVATAR, PROFILES } from '../utils/constants'
 
 const Header = () => {
   const user = useSelector((store) => store.user)
