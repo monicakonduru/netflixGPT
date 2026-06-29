@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TMDB_IMG_CDN_URL } from '../utils/constants'
+import VideoBackground from './VideoBackground'
 
 // Hero banner at the top of the browse page, built from the first movie.
 const MainContainer = ({ movie }) => {
@@ -17,13 +17,13 @@ const MainContainer = ({ movie }) => {
 
   if (!movie) return null
 
-  const { title, overview, backdrop_path } = movie
+  const { id, title, overview, backdrop_path } = movie
 
   return (
-    <div className="relative h-[56vh] w-full md:h-[80vh]">
-      <img
-        className="absolute inset-0 h-full w-full object-cover"
-        src={TMDB_IMG_CDN_URL + (backdrop_path || movie.poster_path)}
+    <div className="relative h-[56vh] w-full overflow-hidden md:h-[80vh]">
+      <VideoBackground
+        movieId={id}
+        fallbackImage={backdrop_path || movie.poster_path}
         alt={title}
       />
       {/* Fade into the page background at the bottom + dim for text legibility. */}
@@ -39,16 +39,16 @@ const MainContainer = ({ movie }) => {
           {title}
         </h1>
 
-        {/* Description collapses away after a few seconds. The grid-rows trick
-            animates height smoothly without a hard-coded max-height. */}
-        <div
-          className={`grid transition-all duration-700 ease-out ${
-            expanded
-              ? 'mt-3 grid-rows-[1fr] opacity-100'
-              : 'mt-0 grid-rows-[0fr] opacity-0'
-          }`}
-        >
-          <p className="overflow-hidden text-sm text-gray-200 md:line-clamp-3 md:text-base">
+        {/* Description stays visible but shrinks after a few seconds,
+            mirroring the Netflix hero behaviour. */}
+        <div className="mt-3 grid">
+          <p
+            className={`overflow-hidden text-gray-200 transition-all duration-700 ease-out ${
+              expanded
+                ? 'text-sm md:line-clamp-3 md:text-base'
+                : 'text-xs md:line-clamp-2 md:text-sm'
+            }`}
+          >
             {overview}
           </p>
         </div>

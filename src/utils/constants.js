@@ -10,16 +10,6 @@ export const LOGIN_BG = '/loginBg.png'
 // Default avatar shown in the header for a signed-in user (served from /public).
 export const AVATAR = '/user.png'
 
-// Header navigation links.
-export const NAV_LINKS = [
-  'Home',
-  'Shows',
-  'Movies',
-  'Games',
-  'New & Popular',
-  'My List',
-  'Browse by Languages',
-]
 
 // Static profiles shown in the avatar dropdown, mirroring the Netflix UI.
 export const PROFILES = [

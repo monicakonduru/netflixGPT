@@ -64,7 +64,6 @@ function Browser() {
       <Header />
       <MainContainer movie={nowPlayingMovies?.[0]} />
       <div className="relative z-10 -mt-20 space-y-8 pb-12">
-        <MovieList title="Now Playing" movies={nowPlayingMovies} />
         <MovieList title="Popular" movies={popularMovies} />
         <MovieList title="Top Rated" movies={topRatedMovies} />
         <MovieList title="Upcoming" movies={upcomingMovies} />

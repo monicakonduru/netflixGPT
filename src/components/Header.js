@@ -44,19 +44,6 @@ const Header = () => {
       {/* Left: logo + primary navigation */}
       <div className="flex items-center gap-8">
         <img className="w-28" src={NETFLIX_LOGO} alt="Netflix Logo" />
-        <nav className="hidden items-center gap-5 text-sm text-[#e5e5e5] lg:flex">
-          {NAV_LINKS.map((link, index) => (
-            <button
-              key={link}
-              className={
-                'transition hover:text-white ' +
-                (index === 0 ? 'font-semibold text-white' : '')
-              }
-            >
-              {link}
-            </button>
-          ))}
-        </nav>
       </div>
 
       {/* Right: search, profile shortcut, notifications, avatar menu */}
