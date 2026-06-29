@@ -27,3 +27,20 @@ export const PROFILES = [
   { name: 'Profile 2', img: '/profile1.png' },
   { name: 'Children', color: 'bg-gradient-to-br from-pink-400 to-yellow-300', kids: true },
 ]
+
+// TMDB (The Movie Database) API config.
+// Read-access bearer token used to authenticate every TMDB request.
+export const TMDB_BEARER_TOKEN =
+  'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxYmQ5ZmE1YjliNjkzYTJhMjI2YTAwMTI0NTE0Y2I5NyIsIm5iZiI6MTc4MjcyODIzMi42MTQsInN1YiI6IjZhNDI0NjI4OGY4MWY0ZGVlZWI0YmUxNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pbA5WjCdPrjWkXmI-D_iFWL55--e2iH3VgYJ-y1D7SU'
+
+// Shared fetch() options for authenticated TMDB GET requests.
+export const TMDB_API_OPTIONS = {
+  method: 'GET',
+  headers: {
+    accept: 'application/json',
+    Authorization: 'Bearer ' + TMDB_BEARER_TOKEN,
+  },
+}
+
+// Base URL for TMDB poster/backdrop images (append a size + file path).
+export const TMDB_IMG_CDN_URL = 'https://image.tmdb.org/t/p/w500'
