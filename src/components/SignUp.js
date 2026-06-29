@@ -6,6 +6,7 @@ import { auth } from '../utils/firebase'
 import { validateForm } from '../utils/validate'
 import { authErrorMessage } from '../utils/authErrors'
 import Loader from './Loader'
+import { NETFLIX_LOGO, LOGIN_BG } from '../utils/constants'
 
 const SignUp = () => {
   const navigate = useNavigate()
@@ -51,7 +52,7 @@ const SignUp = () => {
     <div className="relative min-h-screen w-full">
       <img
         className="absolute inset-0 h-full w-full object-cover"
-        src="loginBg.png"
+        src={LOGIN_BG}
         alt="Background"
       />
       <div className="absolute inset-0 bg-black/60" />
@@ -60,7 +61,7 @@ const SignUp = () => {
       <header className="relative z-10 flex items-center justify-between px-6 py-4 md:px-12">
         <img
           className="w-32 md:w-44"
-          src="https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production_2026-05-14/consent/87b6a5c0-0104-4e96-a291-092c11350111/019ae4b5-d8fb-7693-90ba-7a61d24a8837/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
+          src={NETFLIX_LOGO}
           alt="Netflix Logo"
         />
 

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import Header from './Header'
 import LoginForm from './LoginForm'
 import Loader from './Loader'
+import { LOGIN_BG } from '../utils/constants'
 
 export const Login = () => {
   const user = useSelector((store) => store.user)
@@ -24,7 +25,7 @@ export const Login = () => {
 
       <img
         className="absolute inset-0 h-full w-full object-cover"
-        src= "loginBg.png"
+        src={LOGIN_BG}
         alt="Login Background"
       />
       <div className="absolute inset-0 bg-black/50" />

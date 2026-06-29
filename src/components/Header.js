@@ -2,29 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { signOut } from 'firebase/auth'
 import { auth } from '../utils/firebase'
-
-const NETFLIX_LOGO =
-  'https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production_2026-05-14/consent/87b6a5c0-0104-4e96-a291-092c11350111/019ae4b5-d8fb-7693-90ba-7a61d24a8837/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png'
-
-const AVATAR = '/user.png'
-
-const NAV_LINKS = [
-  'Home',
-  'Shows',
-  'Movies',
-  'Games',
-  'New & Popular',
-  'My List',
-  'Browse by Languages',
-]
-
-
-// Static profiles shown in the avatar dropdown, mirroring the Netflix UI.
-const PROFILES = [
-  { name: 'Profile 1', img: '/profile1.png' },
-  { name: 'Profile 2', img: '/profile1.png' },
-  { name: 'Children', color: 'bg-gradient-to-br from-pink-400 to-yellow-300', kids: true },
-]
+import { NETFLIX_LOGO, AVATAR, NAV_LINKS, PROFILES } from '../utils/constants'
 
 const Header = () => {
   const user = useSelector((store) => store.user)
