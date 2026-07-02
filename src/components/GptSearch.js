@@ -5,6 +5,18 @@ import openai from '../utils/openai'
 import { addGptMovieResult } from '../utils/gptSlice'
 import MovieList from './MovieList'
 
+// Shown in the suggested section when the GPT/TMDB search fails, so the user
+// still gets something to browse alongside the error message.
+const DEFAULT_SUGGESTIONS = [
+  'Inception',
+  'The Dark Knight',
+  'Interstellar',
+  'The Shawshank Redemption',
+  'The Godfather',
+  'Inside Out',
+  'The Lion King',
+]
+
 // Ask TMDB for a single title and return its result list (best match first).
 const searchMovieByTitle = async (title) => {
   const response = await fetch(
@@ -71,6 +83,29 @@ function GptSearch() {
     } catch (err) {
       console.error('GPT search failed:', err)
       setError('Something went wrong with the search. Please try again.')
+
+      // Fall back to a default list so the results area still shows something
+      // useful. TMDB is independent of the GPT call above, so this usually
+      // works even when GPT is the thing that failed. Unlike a real search,
+      // we collapse all of these into a single "Also suggested" row rather
+      // than one row per title.
+      try {
+        const fallbackResults = await Promise.all(
+          DEFAULT_SUGGESTIONS.map(searchMovieByTitle)
+        )
+        // Take the best (first) TMDB match per title into one combined row.
+        const suggestedRow = fallbackResults
+          .map((results) => results[0])
+          .filter(Boolean)
+        dispatch(
+          addGptMovieResult({
+            movieNames: ['Also suggested'],
+            movieResults: [suggestedRow],
+          })
+        )
+      } catch (fallbackErr) {
+        console.error('Fallback TMDB search failed:', fallbackErr)
+      }
     } finally {
       setLoading(false)
     }
