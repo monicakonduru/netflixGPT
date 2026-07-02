@@ -20,8 +20,8 @@ export const PROFILES = [
 
 // TMDB (The Movie Database) API config.
 // Read-access bearer token used to authenticate every TMDB request.
-export const TMDB_BEARER_TOKEN =
-  'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxYmQ5ZmE1YjliNjkzYTJhMjI2YTAwMTI0NTE0Y2I5NyIsIm5iZiI6MTc4MjcyODIzMi42MTQsInN1YiI6IjZhNDI0NjI4OGY4MWY0ZGVlZWI0YmUxNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pbA5WjCdPrjWkXmI-D_iFWL55--e2iH3VgYJ-y1D7SU'
+// Sourced from .env.local (REACT_APP_ vars are inlined at build time by CRA).
+export const TMDB_BEARER_TOKEN = process.env.REACT_APP_TMDB_BEARER_TOKEN
 
 // Shared fetch() options for authenticated TMDB GET requests.
 export const TMDB_API_OPTIONS = {
@@ -34,3 +34,7 @@ export const TMDB_API_OPTIONS = {
 
 // Base URL for TMDB poster/backdrop images (append a size + file path).
 export const TMDB_IMG_CDN_URL = 'https://image.tmdb.org/t/p/w500'
+
+
+// Sourced from .env.local — never hardcode the key here.
+export const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY

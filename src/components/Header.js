@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { signOut } from 'firebase/auth'
 import { auth } from '../utils/firebase'
+import { toggleGptSearchView } from '../utils/appSlice'
 import { NETFLIX_LOGO, AVATAR, PROFILES } from '../utils/constants'
 
 const Header = () => {
   const user = useSelector((store) => store.user)
+  const gptSearchView = useSelector((store) => store.app.gptSearchView)
+  const dispatch = useDispatch()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
@@ -48,9 +51,18 @@ const Header = () => {
 
       {/* Right: search, profile shortcut, notifications, avatar menu */}
       <div className="flex items-center gap-6 text-white">
-        <button aria-label="Search" className="transition hover:text-gray-300">
+        <button
+          onClick={() => dispatch(toggleGptSearchView())}
+          aria-pressed={gptSearchView}
+          className={
+            'flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-lg shadow-black/40 ring-1 transition active:scale-95 ' +
+            (gptSearchView
+              ? 'bg-white text-[#e50914] ring-white/60 hover:bg-gray-100'
+              : 'bg-gradient-to-r from-[#e50914] to-[#b0060f] text-white ring-white/10 hover:from-[#f6121d] hover:to-[#c50811] hover:shadow-red-900/40')
+          }
+        >
           <svg
-            className="h-6 w-6"
+            className="h-4 w-4"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -58,30 +70,12 @@ const Header = () => {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <circle cx="11" cy="11" r="7" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            <path d="M5 3l1.5 3.5L10 8 6.5 9.5 5 13 3.5 9.5 0 8l3.5-1.5z" transform="translate(4 1)" />
+            <path d="M18 14l.9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9z" />
           </svg>
+          {gptSearchView ? 'Home' : 'GPT Search'}
         </button>
 
-        <span className="hidden text-sm sm:inline">Children</span>
-
-        <button aria-label="Notifications" className="relative transition hover:text-gray-300">
-          <svg
-            className="h-6 w-6"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-[#e50914] px-1 text-[10px] font-bold">
-            2
-          </span>
-        </button>
 
         {/* Avatar + dropdown */}
         <div className="relative" ref={menuRef}>

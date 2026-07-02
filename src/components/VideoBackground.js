@@ -3,8 +3,6 @@ import { useSelector } from 'react-redux'
 import useMovieTrailer from '../hooks/useMovieTrailer'
 import { TMDB_IMG_CDN_URL } from '../utils/constants'
 
-// Autoplaying, muted YouTube trailer used as the hero banner background.
-// Falls back to the movie backdrop image until the trailer is ready.
 const VideoBackground = ({ movieId, fallbackImage, alt }) => {
   const trailerVideo = useSelector((store) => store.movies.trailerVideo)
   useMovieTrailer(movieId)
