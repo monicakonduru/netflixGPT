@@ -14,16 +14,14 @@ function GptSearch() {
 
   return (
     <>
-      <div className="absolute inset-0 -z-10">
-        <img
-          className="h-screen w-full object-cover"
-          src={LOGIN_BG}
-          alt="Background"
-        />
-        <div className="absolute inset-0 bg-black/60" />
-      </div>
+      <img
+        className="absolute inset-0 h-full w-full object-cover"
+        src={LOGIN_BG}
+        alt="Background"
+      />
+      <div className="absolute inset-0 bg-black/60" />
 
-      <div className="flex justify-center pt-[35vh]">
+      <div className="relative z-10 flex justify-center pt-[35vh]">
         <form
           onSubmit={handleSearch}
           className="flex w-11/12 gap-3 rounded-lg bg-black/80 p-3 shadow-xl ring-1 ring-white/10 md:w-1/2"
