@@ -5,6 +5,7 @@ import Header from './Header'
 import Loader from './Loader'
 import MainContainer from './MainContainer'
 import MovieList from './MovieList'
+import GptSearch from './GptSearch'
 import { TMDB_API_OPTIONS } from '../utils/constants'
 import {
   setNowPlayingMovies,
@@ -24,6 +25,7 @@ const MOVIE_CATEGORIES = [
 function Browser() {
   const user = useSelector((store) => store.user)
   const authChecked = useSelector((store) => store.app.authChecked)
+  const gptSearchView = useSelector((store) => store.app.gptSearchView)
   const nowPlayingMovies = useSelector((store) => store.movies.nowPlayingMovies)
   const popularMovies = useSelector((store) => store.movies.popularMovies)
   const topRatedMovies = useSelector((store) => store.movies.topRatedMovies)
@@ -62,12 +64,18 @@ function Browser() {
   return (
     <div className="relative min-h-screen bg-black">
       <Header />
-      <MainContainer movie={nowPlayingMovies?.[0]} />
-      <div className="relative z-10 -mt-20 space-y-8 pb-12">
-        <MovieList title="Popular" movies={popularMovies} />
-        <MovieList title="Top Rated" movies={topRatedMovies} />
-        <MovieList title="Upcoming" movies={upcomingMovies} />
-      </div>
+      {gptSearchView ? (
+        <GptSearch />
+      ) : (
+        <>
+          <MainContainer movie={nowPlayingMovies?.[0]} />
+          <div className="relative z-10 -mt-20 space-y-8 pb-12">
+            <MovieList title="Popular" movies={popularMovies} />
+            <MovieList title="Top Rated" movies={topRatedMovies} />
+            <MovieList title="Upcoming" movies={upcomingMovies} />
+          </div>
+        </>
+      )}
     </div>
   )
 }

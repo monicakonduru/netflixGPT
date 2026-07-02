@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { signOut } from 'firebase/auth'
 import { auth } from '../utils/firebase'
+import { toggleGptSearchView } from '../utils/appSlice'
 import { NETFLIX_LOGO, AVATAR, PROFILES } from '../utils/constants'
 
 const Header = () => {
   const user = useSelector((store) => store.user)
+  const gptSearchView = useSelector((store) => store.app.gptSearchView)
+  const dispatch = useDispatch()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
@@ -48,7 +51,16 @@ const Header = () => {
 
       {/* Right: search, profile shortcut, notifications, avatar menu */}
       <div className="flex items-center gap-6 text-white">
-        <button className="flex items-center gap-2 rounded-md bg-gradient-to-r from-[#e50914] to-[#b0060f] px-4 py-2 text-sm font-semibold shadow-lg shadow-black/40 ring-1 ring-white/10 transition hover:from-[#f6121d] hover:to-[#c50811] hover:shadow-red-900/40 active:scale-95">
+        <button
+          onClick={() => dispatch(toggleGptSearchView())}
+          aria-pressed={gptSearchView}
+          className={
+            'flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold shadow-lg shadow-black/40 ring-1 transition active:scale-95 ' +
+            (gptSearchView
+              ? 'bg-white text-[#e50914] ring-white/60 hover:bg-gray-100'
+              : 'bg-gradient-to-r from-[#e50914] to-[#b0060f] text-white ring-white/10 hover:from-[#f6121d] hover:to-[#c50811] hover:shadow-red-900/40')
+          }
+        >
           <svg
             className="h-4 w-4"
             viewBox="0 0 24 24"
@@ -61,7 +73,7 @@ const Header = () => {
             <path d="M5 3l1.5 3.5L10 8 6.5 9.5 5 13 3.5 9.5 0 8l3.5-1.5z" transform="translate(4 1)" />
             <path d="M18 14l.9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9z" />
           </svg>
-          GPT Search
+          {gptSearchView ? 'Home' : 'GPT Search'}
         </button>
 
 
